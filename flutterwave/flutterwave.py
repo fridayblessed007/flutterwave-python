@@ -1,12 +1,12 @@
-from utils import Utils
-from ip import Ip
-from bvn import Bvn
-from account import Account
-from bin import Bin
-from disburse import Disburse
-from card import Card
-from bank import Bank
-from ach import Ach
+from .utils import Utils
+from .ip import Ip
+from .bvn import Bvn
+from .account import Account
+from .bin import Bin
+from .disburse import Disburse
+from .card import Card
+from .bank import Bank
+from .ach import Ach
 
 class Flutterwave():
     """The Flutterwave Class

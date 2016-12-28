@@ -1,1 +1,1 @@
-from flutterwave import Flutterwave
+from .flutterwave import Flutterwave

@@ -1,4 +1,4 @@
-import requests
+import requests,json
 import base64
 from Crypto.Cipher import DES3
 from Crypto.Util import Counter
@@ -68,25 +68,27 @@ class Utils(object):
         """Provides encryption for plaintext content required in request data."""
 
         if(self.debug):
-            print plainText
+            print (plainText)
 
         md5Key = hashlib.md5(self.apiKey.encode("utf-8")).digest()
-        md5Key = "{}{}".format(md5Key, md5Key[0:8])
+        md5Key = md5Key+md5Key[0:8]
 
         blockSize = 8
-        padDiff = blockSize - (len(plainText) % blockSize)
+        padDiff = blockSize - len(plainText) % blockSize
+        padding = chr(padDiff)*padDiff
         cipher = DES3.new(md5Key, DES3.MODE_ECB)
 
-        plainText = "{}{}".format(plainText, "".join(chr(padDiff) * padDiff))
+        plainText += padding
+
         encrypted = base64.b64encode(cipher.encrypt(plainText))
-        return encrypted
+        return encrypted.decode('utf-8')
 
     
     def decryptData(self, ciphertext):
         """Provides decryption for encrypted content returned from flutterwave service"""
 
         if(self.debug):
-            print ciphertext
+            print (ciphertext)
 
         md5Key = hashlib.md5(self.apiKey.encode("utf-8")).digest()
         md5Key = "{}{}".format(md5Key, md5Key[0:8])
@@ -95,18 +97,17 @@ class Utils(object):
 
         decrypted = cipher.decrypt(base64.b64decode(ciphertext))
         return decrypted
-
         
     def sendRequest(self, url, payload):
         """Request Handler forwards http request to flutterwave remote service"""
         if(self.debug):
-            print "{} :: {}{}".format(">>> URL", self.baseUrl, url)
-            print "{} :: {}".format(">>> PAYLOAD",payload)
+            print ("{} :: {}{}".format(">>> URL", self.baseUrl, url))
+            print ("{} :: {}".format(">>> PAYLOAD",payload))
 
-        r = requests.post("{}{}".format(self.baseUrl, url), json=payload, headers={})
+        r = requests.post("{}{}".format(self.baseUrl, url),data=json.dumps(payload), headers = {'Accept': 'application/json', 'Content-Type': 'application/json'})
 
         if(self.debug):
-            print "{} :: {} - {}".format(">>> RESPONSE", r.status_code, r.text)
+            print ("{} :: {} - {}".format(">>> RESPONSE", r.status_code, r.text))
 
         return r
 

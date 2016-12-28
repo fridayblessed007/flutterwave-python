@@ -1,4 +1,4 @@
-from utils import Utils
+from .utils import Utils
 
 class Disburse(Utils):
     """Flutterwave Disburse module
