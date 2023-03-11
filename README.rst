@@ -101,4 +101,4 @@ Testing
 
 Flutterwave-Python is written in python version 2.7 and can be tested by running the command below from the package folder::
 
-    python -m unittest discover
+    python -m unittest discover.
